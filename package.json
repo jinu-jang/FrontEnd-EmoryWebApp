@@ -1,0 +1,29 @@
+{
+  "name": "FrontEnd-EmoryWebApp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "browser-sync start --server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jimjang95/FrontEnd-EmoryWebApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jimjang95/FrontEnd-EmoryWebApp/issues"
+  },
+  "homepage": "https://github.com/jimjang95/FrontEnd-EmoryWebApp#readme",
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "prettier": "^1.19.1",
+    "terser": "^4.6.3"
+  },
+  "dependencies": {
+    "react": "^16.12.0"
+  }
+}
