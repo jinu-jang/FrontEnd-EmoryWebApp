@@ -16,7 +16,6 @@
   "bugs": {
     "url": "https://github.com/jimjang95/FrontEnd-EmoryWebApp/issues"
   },
-  "homepage": "https://github.com/jimjang95/FrontEnd-EmoryWebApp#readme",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -25,7 +24,6 @@
     "react-dom": "^16.13.0",
     "react-scripts": "3.4.0"
   },
-
   "eslintConfig": {
     "extends": "react-app"
   },
