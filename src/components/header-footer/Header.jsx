@@ -3,18 +3,15 @@ import logo from '../../img/title.png';
 
 const Header = () => {
     return (
-        <div id="header-wrapper">
-            <div id="header">
-                <img class="header-image" src={logo} alt="Emory Logo"/>
-                <div id="explanation">
-                   <b>How to use</b>
-                </div>
-            </div>
+        <>
+        <img class="header-image" src={logo} alt="Emory Logo"/>
+        <div id="explanation">
+           <b>How to use</b>
         </div>
+        </>
     );
 };
 
 export default Header;
 
 
-    
