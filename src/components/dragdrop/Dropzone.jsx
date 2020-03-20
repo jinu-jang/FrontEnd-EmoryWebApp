@@ -42,9 +42,6 @@ function MyDropzone() {
           <p>Drop it</p> :
           <p><b>Choose a file</b> or drag it here</p>
       }
-      <div className="box__uploading" _msthash="526214" _msttexthash="1845610" _msthidden="1">Uploading…</div>
-      <div className="box__success" _msthash="526617" _msttexthash="292370" _msthidden="1">Done! <a href="https://css-tricks.com/examples/DragAndDropFileUploading//?" className="box__restart" role="button">Upload more?</a></div>
-      <div className="box__error" _msthash="527020" _msttexthash="274079" _msthidden="1">Error! <span></span>. <a href="https://css-tricks.com/examples/DragAndDropFileUploading//?" className="box__restart" role="button">Try again!</a></div>
     </Box>
   )
 }
