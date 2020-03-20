@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./main.css";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
-import Login from "./components/login/Login";
+import Login from "./components/Login";
 import AppliedRoute from "./components/AppliedRoute";
-import Header from "./components/header-footer/Header";
-import Dropzone from "./components/dragdrop/Dropzone";
-import Footer from "./components/header-footer/Footer";
+import Upload from "./components/Upload";
 
 const Routes = appProps => {
   const [loggedIn, setLogIn] = useState(false);
@@ -30,7 +28,7 @@ const Routes = appProps => {
         <AppliedRoute
           exact
           path="/upload"
-          component={Dropzone}
+          component={Upload}
           appProps={{ loggedIn, setLogIn }}
         />
       </div>

@@ -3,6 +3,7 @@ import {useDropzone} from 'react-dropzone';
 import styled from 'styled-components';
 
 const Box = styled.div`
+  margin-top:30px;
   outline: 2px dashed #92b0b3;
   background-color: #c8dadf;
   outline-offset: -10px;

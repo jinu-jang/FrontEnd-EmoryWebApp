@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import styled from "styled-components";
-import Header from "./../header-footer/Header";
+import Header from "./header-footer/Header";
 
 const LoginDiv = styled.div`
   min-width: 480px;
