@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./main.css";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import Login from "./components/login/Login";
 import AppliedRoute from "./components/AppliedRoute";
 import Header from "./components/header-footer/Header";
@@ -16,12 +16,21 @@ const Routes = appProps => {
       <div>
         <Route
           path="/"
-          render={props => props.location.pathname !== "/" && <Login />}
+          render={props =>
+            !loggedIn ? <Redirect to="/" /> : <Redirect to="/upload" />
+          }
         />
+
         <AppliedRoute
           exact
           path="/"
           component={Login}
+          appProps={{ loggedIn, setLogIn }}
+        />
+        <AppliedRoute
+          exact
+          path="/upload"
+          component={Dropzone}
           appProps={{ loggedIn, setLogIn }}
         />
       </div>

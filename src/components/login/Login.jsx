@@ -13,15 +13,17 @@ const LoginDiv = styled.div`
 `;
 
 const Login = props => {
-  const [email, setEmail] = useState("");
+  const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
   function validateForm() {
-    return email.length > 0 && password.length > 0;
+    return id.length > 0 && password.length > 0;
   }
 
   function handleSubmit(event) {
     event.preventDefault();
+    props.setLogIn(true);
+    // api 추가
   }
 
   return (
@@ -29,13 +31,13 @@ const Login = props => {
       <Header></Header>
       <LoginDiv>
         <form onSubmit={handleSubmit}>
-          <FormGroup controlId="email" bssize="large">
-            <FormLabel>Email</FormLabel>
+          <FormGroup controlId="id" bssize="large">
+            <FormLabel>ID</FormLabel>
             <FormControl
               autoFocus
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              type="text"
+              value={id}
+              onChange={e => setId(e.target.value)}
             />
           </FormGroup>
           <FormGroup controlId="password" bssize="large">
