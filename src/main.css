@@ -20,6 +20,9 @@
     margin-bottom: 20px;
     margin-left: 10px;
 }
+#dragdrop{
+
+}
 .box__dragndrop,
 .box__uploading,
 .box__success,
@@ -64,7 +67,7 @@
   display: block;
 }
 
-.box {
+/*.box {
     font-size: 1.25rem;
     background-color: #c8dadf;
     position: relative;
@@ -77,3 +80,4 @@
 .no-js .box__button {
   display: block;
 }
+*/
