@@ -1,17 +1,8 @@
-import React , { Fragment } from "react";
-import logo from '../../img/title.png';
+import React from "react";
+import logo from "../../img/title.png";
 
 const Header = () => {
-    return (
-        <Fragment>
-        <img className="header-image" src={logo} alt="Emory Logo"/>
-        <div id="explanation">
-           <b>How to use</b>
-        </div>
-        </Fragment>
-    );
+  return <img className="header-image" src={logo} alt="Emory Logo" />;
 };
 
 export default Header;
-
-
