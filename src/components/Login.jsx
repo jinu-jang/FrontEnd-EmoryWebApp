@@ -1,7 +1,14 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import styled from "styled-components";
 import Header from "./header-footer/Header";
+
+const Container = styled.div`
+  width: 100%;
+  max-width: 680px;
+  text-align: center;
+  margin: 0 auto;
+`
 
 const LoginDiv = styled.div`
   min-width: 480px;
@@ -27,7 +34,7 @@ const Login = props => {
   }
 
   return (
-    <Fragment>
+    <Container>
       <Header></Header>
       <LoginDiv>
         <form onSubmit={handleSubmit}>
@@ -53,7 +60,7 @@ const Login = props => {
           </Button>
         </form>
       </LoginDiv>
-    </Fragment>
+    </Container>
   );
 };
 
