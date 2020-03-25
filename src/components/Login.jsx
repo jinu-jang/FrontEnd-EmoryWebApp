@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import styled from "styled-components";
+import axios from "axios";
+import { publicEncrypt } from "crypto";
 import Header from "./header-footer/Header";
 
 const Container = styled.div`
@@ -8,6 +10,11 @@ const Container = styled.div`
   max-width: 680px;
   text-align: center;
   margin: 0 auto;
+`
+
+const ErrorSpan = styled.span`
+  color: red;
+  font-weight: bold;
 `
 
 const LoginDiv = styled.div`
@@ -19,9 +26,24 @@ const LoginDiv = styled.div`
   }
 `;
 
+const instance = axios.create({
+  'baseURL' : 'http://localhost:3001',
+  "Content-Type" : 'application/json'
+});
+
+let publicKey;
+instance.get('/api/auth/login')
+  .then(response => {
+    publicKey = response.data.publicKey;
+  })
+  .catch(error => {
+    console.log(error);
+  });
+
 const Login = props => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
 
   function validateForm() {
     return id.length > 0 && password.length > 0;
@@ -29,13 +51,26 @@ const Login = props => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    props.setLogIn(true);
-    // api 추가
+    let options = `{"username":"${id}", "password":"${password}", "client_id":"jinu_front_end"}`
+    let encrypted_options = publicEncrypt(publicKey, Buffer.from(options, 'utf8')).toString("Base64");
+
+    instance.post('/api/auth/login', {
+      "encrypted_options": encrypted_options
+    })
+    .then(response => {
+      props.setLoginToken(response.data.token);
+      setError(false);
+    })
+    .catch(error => {
+      console.log(`[Login] Error Code ${error.response.status}: ${error.response.data.message}`);
+      setError(true);
+    })
   }
 
   return (
     <Container>
       <Header></Header>
+      {error && <ErrorSpan>Log-in Failure</ErrorSpan>}
       <LoginDiv>
         <form onSubmit={handleSubmit}>
           <FormGroup controlId="id" bssize="large">

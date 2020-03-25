@@ -6,7 +6,7 @@ import AppliedRoute from "./components/AppliedRoute";
 import Upload from "./components/Upload";
 
 const Routes = appProps => {
-  const [loggedIn, setLogIn] = useState(false);
+  const [loginToken, setLoginToken] = useState("");
 
   return (
     <BrowserRouter>
@@ -14,7 +14,7 @@ const Routes = appProps => {
         <Route
           path="/"
           render={props =>
-            !loggedIn ? <Redirect to="/" /> : <Redirect to="/upload" />
+            !loginToken ? <Redirect to="/" /> : <Redirect to="/upload" />
           }
         />
 
@@ -22,13 +22,13 @@ const Routes = appProps => {
           exact
           path="/"
           component={Login}
-          appProps={{ loggedIn, setLogIn }}
+          appProps={{ loginToken, setLoginToken }}
         />
         <AppliedRoute
           exact
           path="/upload"
           component={Upload}
-          appProps={{ loggedIn, setLogIn }}
+          appProps={{ loginToken, setLoginToken }}
         />
       </div>
     </BrowserRouter>
