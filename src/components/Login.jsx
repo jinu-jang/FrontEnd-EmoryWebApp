@@ -63,7 +63,7 @@ const Login = props => {
       setError(false);
     })
     .catch(error => {
-      console.log(`[Login] Error Code ${error.response.status}: ${error.response.data.message}`);
+      console.log(`[Login] Error Code ${error.status}: ${error.data.message}`);
       setError(true);
     })
   }

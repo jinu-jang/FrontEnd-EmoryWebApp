@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { Component, useState } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
+import axios from "axios";
 import something from "./../../img/left-arrow.png";
 import CheckMark from "./../../img/check-mark.png";
 
@@ -22,34 +23,6 @@ const FileWrapper = styled.div`
   text-align: -webkit-match-parent;
 `;
 
-const ButtonWrapper = styled.button`
-  display: block;
-  cursor: pointer !important;
-  border: inherit;
-  border-radius: 3px 3px 3px 3px;
-  margin-top: 5px;
-  overflow: hidden;
-  width: auto;
-  background-color: #ffdb84;
-  line-height: 18px;
-  color: #333333;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  margin: 0;
-  padding: 0;
-  outline: 0;
-  font-style: inherit;
-  font-family: inherit;
-  vertical-align: baseline;
-  box-sizing: border-box;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-`;
-
 const Icon = styled.img`
   max-width: 100%;
   height: auto;
@@ -64,9 +37,65 @@ const Icon = styled.img`
 
 const FileBox = props => {
   const [done, setDone] = useState(false);
+
+  const checkDownload = () => {
+    axios
+      .get(
+        props.targetLink,
+        {
+          params: {
+            csvId : props.fileId
+          },
+          headers: {
+            Authorization: `Bearer ${props.loginToken}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      .then(res => {
+        setDone(true);
+        clearInterval(timer)
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const doDownload = (event) => {
+    event.preventDefault();
+    axios
+      .get(
+        props.targetLink,
+        {
+          responseType: 'blob',
+          params: {
+            csvId : props.fileId
+          },
+          headers: {
+            Authorization: `Bearer ${props.loginToken}`,
+            'Content-Type': 'application/json',
+            Accept: '.csv'
+          }
+        }
+      )
+      .then(res => {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'file.csv'); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const timer = setInterval(checkDownload, 5000);
+
   return (
     <FileWrapper>
-      <div>{props.FileId}</div>
+      <div>{props.fileName}</div>
       {done ? (
         <Icon src={CheckMark} />
       ) : (
@@ -76,13 +105,11 @@ const FileBox = props => {
           }
         />
       )}
-      <ButtonWrapper>
-        {done ? (
-          <Button onClick={e => setDone(true)}>DOWNLOAD</Button>
-        ) : (
-          <Button disabled={true}>LOADING</Button>
-        )}
-      </ButtonWrapper>
+      {done ? (
+        <Button onClick={doDownload}>DOWNLOAD</Button>
+      ) : (
+        <Button disabled={true}>LOADING</Button>
+      )}
     </FileWrapper>
   );
 };
