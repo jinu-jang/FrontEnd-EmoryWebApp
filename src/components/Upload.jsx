@@ -11,12 +11,14 @@ const Container = styled.div`
   margin: 0 auto;
 `
 
-const Upload = () => (
-    <Container>
-        <Header/>
-        <Dropzone/>
-        <Footer/>
-    </Container>
-)
+const Upload = (props) => {
+    return (
+        <Container>
+            <Header/>
+            <Dropzone loginToken={props.loginToken}/>
+            <Footer/>
+        </Container>
+    );
+}
 
 export default Upload;
