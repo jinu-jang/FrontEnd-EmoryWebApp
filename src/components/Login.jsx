@@ -53,6 +53,7 @@ const Login = props => {
     event.preventDefault();
     let options = `{"username":"${id}", "password":"${password}", "client_id":"jinu_front_end"}`
     let encrypted_options = publicEncrypt(publicKey, Buffer.from(options, 'utf8')).toString("Base64");
+    console.log(encrypted_options)
 
     instance.post('/api/auth/login', {
       "encrypted_options": encrypted_options
