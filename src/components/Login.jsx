@@ -57,7 +57,6 @@ const Login = props => {
       publicKey,
       Buffer.from(options, "utf8")
     ).toString("Base64");
-    console.log(encrypted_options);
 
     instance
       .post("/api/auth/login", {
