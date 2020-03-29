@@ -2,7 +2,7 @@ import React, { Component, useState } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import something from "./../../img/left-arrow.png";
+import FormData from "form-data";
 import CheckMark from "./../../img/check-mark.png";
 
 const FileWrapper = styled.div`
@@ -36,13 +36,45 @@ const Icon = styled.img`
 `;
 
 const FileBox = props => {
+  console.log(props.file);
   const [done, setDone] = useState(false);
+  const [csvId, setCsvId] = useState("");
+  const [error, setError] = useState("");
+  const [uploaded, setUploaded] = useState(false);
+
+  const form = new FormData();
+  form.append("target_csv", props.file);
+  form.append("target_col", "Hello");
+
+  if (!uploaded) {
+    console.log('upload check!');
+    setUploaded(true);
+    axios
+    .post(props.upload_url, form, {
+      headers: {
+        Authorization: `Bearer ${props.loginToken}`,
+        "Content-Type": "multipart"
+      }
+    })
+    .then(response => {
+      setCsvId(response.data.csvId);
+      setUploaded(true);
+      setError("");
+    })
+    .catch(error => {
+      setError(error.message);
+      setUploaded(false);
+      console.log(error.message);
+    });
+  }
+
 
   const checkDownload = () => {
+    console.log('checkDownload', csvId);
     axios
-      .get(props.targetLink, {
+      .get(props.download_url, {
         params: {
-          csvId: props.fileId
+          csvId: csvId
         },
         headers: {
           Authorization: `Bearer ${props.loginToken}`,
@@ -61,10 +93,10 @@ const FileBox = props => {
   const doDownload = event => {
     event.preventDefault();
     axios
-      .get(props.targetLink, {
+      .get(props.download_url, {
         responseType: "blob",
         params: {
-          csvId: props.fileId
+          csvId: csvId
         },
         headers: {
           Authorization: `Bearer ${props.loginToken}`,
@@ -73,7 +105,7 @@ const FileBox = props => {
         }
       })
       .then(res => {
-        const filename = props.fileName.replace(".csv", "-anonymized.csv");
+        const filename = props.file.name.replace(".csv", "-anonymized.csv");
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -86,11 +118,15 @@ const FileBox = props => {
       });
   };
 
-  const timer = setInterval(checkDownload, 5000);
+  let timer;
+  if (!done) {
+    console.log('timer!');
+    timer = setInterval(checkDownload, 5000);
+  }
 
   return (
     <FileWrapper>
-      <div>{props.fileName}</div>
+      <div>{props.file.name}</div>
       {done ? (
         <Icon src={CheckMark} />
       ) : (
