@@ -2,7 +2,6 @@ import React, { Component, useState } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import something from "./../../img/left-arrow.png";
 import CheckMark from "./../../img/check-mark.png";
 
 const FileWrapper = styled.div`
