@@ -31,8 +31,10 @@ const BoxIcon = styled.svg`
   margin-bottom: 40px;
 `;
 
+const url = "http://localhost:3001";
+const download_url = url + "/api/download";
 const instance = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: url,
   "Content-Type": "multipart"
 });
 
@@ -69,7 +71,12 @@ function MyDropzone(props) {
     <Box {...getRootProps()}>
       {error && <ErrorSpan>${error}</ErrorSpan>}
       {uploaded ? (
-        <FileBox FileId={fileName} />
+        <FileBox
+          loginToken={props.loginToken}
+          fileName={fileName}
+          fileId={csvId}
+          targetLink={download_url}
+        />
       ) : (
         <Fragment>
           <BoxIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 43">

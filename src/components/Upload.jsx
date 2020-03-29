@@ -9,16 +9,16 @@ const Container = styled.div`
   max-width: 680px;
   text-align: center;
   margin: 0 auto;
-`
+`;
 
-const Upload = (props) => {
-    return (
-        <Container>
-            <Header/>
-            <Dropzone loginToken={props.loginToken}/>
-            <Footer/>
-        </Container>
-    );
-}
+const Upload = props => {
+  return (
+    <Container>
+      <Header />
+      <Dropzone loginToken={props.loginToken} />
+      <Footer />
+    </Container>
+  );
+};
 
 export default Upload;
