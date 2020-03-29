@@ -1,8 +1,8 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import something from "./../../img/left-arrow.png";
+import FormData from "form-data";
 import CheckMark from "./../../img/check-mark.png";
 
 const FileWrapper = styled.div`
@@ -35,45 +35,73 @@ const Icon = styled.img`
   padding-right: 15px;
 `;
 
-const FileBox = props => {
-  const [done, setDone] = useState(false);
+class FileBox extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      done : false,
+      error: "",
+    }
+    this.csvId = "";
 
-  const checkDownload = () => {
+    const form = new FormData();
+    form.append("target_csv", props.file);
+    form.append("target_col", "Hello");
     axios
-      .get(props.targetLink, {
+    .post(props.upload_url, form, {
+      headers: {
+        Authorization: `Bearer ${props.loginToken}`,
+        "Content-Type": "multipart"
+      }
+    })
+    .then(response => {
+      this.csvId = response.data.csvId
+      this.state.error = "";
+    })
+    .catch(error => {
+      this.state.error = error.message;
+      console.log(this.state.erro);
+    });
+    this.timer = setInterval(this.checkDownload.bind(this), 5000);
+  }
+
+  checkDownload() {
+    console.log('checkDownload', this.csvId);
+    axios
+      .get(this.props.download_url, {
         params: {
-          csvId: props.fileId
+          csvId: this.csvId
         },
         headers: {
-          Authorization: `Bearer ${props.loginToken}`,
+          Authorization: `Bearer ${this.props.loginToken}`,
           "Content-Type": "application/json"
         }
       })
       .then(res => {
-        setDone(true);
-        clearInterval(timer);
+        this.setState({done : true});
+        clearInterval(this.timer);
       })
       .catch(err => {
         console.log(err);
       });
-  };
+  }
 
-  const doDownload = event => {
+  doDownload(event) {
     event.preventDefault();
     axios
-      .get(props.targetLink, {
+      .get(this.props.download_url, {
         responseType: "blob",
         params: {
-          csvId: props.fileId
+          csvId: this.csvId
         },
         headers: {
-          Authorization: `Bearer ${props.loginToken}`,
+          Authorization: `Bearer ${this.props.loginToken}`,
           "Content-Type": "application/json",
           Accept: ".csv"
         }
       })
       .then(res => {
-        const filename = props.fileName.replace(".csv", "-anonymized.csv");
+        const filename = this.props.file.name.replace(".csv", "-anonymized.csv");
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -84,29 +112,29 @@ const FileBox = props => {
       .catch(err => {
         console.log(err);
       });
-  };
+  }
 
-  const timer = setInterval(checkDownload, 5000);
-
-  return (
-    <FileWrapper>
-      <div>{props.fileName}</div>
-      {done ? (
-        <Icon src={CheckMark} />
-      ) : (
-        <Icon
-          src={
-            "http://cdn.lowgif.com/full/ba11c4d30b6f2054-loading-gif-transparent-background-to-setup-a-background-of-beach-just-run-it-is-best-do-this.gif"
-          }
-        />
-      )}
-      {done ? (
-        <Button onClick={doDownload}>DOWNLOAD</Button>
-      ) : (
-        <Button disabled={true}>LOADING</Button>
-      )}
-    </FileWrapper>
-  );
-};
+  render() {
+    return (
+      <FileWrapper>
+        <div>{this.props.file.name}</div>
+        {this.state.done ? (
+          <Icon src={CheckMark} />
+        ) : (
+          <Icon
+            src={
+              "http://cdn.lowgif.com/full/ba11c4d30b6f2054-loading-gif-transparent-background-to-setup-a-background-of-beach-just-run-it-is-best-do-this.gif"
+            }
+          />
+        )}
+        {this.state.done ? (
+          <Button onClick={this.doDownload.bind(this)}>DOWNLOAD</Button>
+        ) : (
+          <Button disabled={true}>LOADING</Button>
+        )}
+      </FileWrapper>
+    );
+  }
+}
 
 export default FileBox;
