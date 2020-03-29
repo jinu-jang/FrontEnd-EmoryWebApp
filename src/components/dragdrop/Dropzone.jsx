@@ -3,11 +3,6 @@ import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import FileBox from "./FileBox";
 
-const ErrorSpan = styled.span`
-  color: red;
-  font-weight: bold;
-`;
-
 const Box = styled.div`
   margin-top: 30px;
   outline: 2px dashed #92b0b3;
@@ -34,8 +29,6 @@ const upload_url = url + "/api/upload";
 const download_url = url + "/api/download";
 
 function MyDropzone(props) {
-  const [error, setError] = useState("");
-  const [csvId, setCsvId] = useState("");
   const [uploaded, setUploaded] = useState(false);
   const [file, setFile] = useState();
 
@@ -47,12 +40,10 @@ function MyDropzone(props) {
 
   return (
     <Box {...getRootProps()}>
-      {error && <ErrorSpan>${error}</ErrorSpan>}
       {uploaded ? (
         <FileBox
           file={file}
           loginToken={props.loginToken}
-          fileId={csvId}
           upload_url={upload_url}
           download_url={download_url}
         />

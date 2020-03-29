@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import axios from "axios";
@@ -40,9 +40,10 @@ class FileBox extends Component {
     super(props);
     this.state = {
       done : false,
-      csvId : "",
       error: "",
     }
+    this.csvId = "";
+
     const form = new FormData();
     form.append("target_csv", props.file);
     form.append("target_col", "Hello");
@@ -54,22 +55,22 @@ class FileBox extends Component {
       }
     })
     .then(response => {
-      this.state.csvId = response.data.csvId
+      this.csvId = response.data.csvId
       this.state.error = "";
     })
     .catch(error => {
       this.state.error = error.message;
       console.log(this.state.erro);
     });
-    this.state.timer = setInterval(this.checkDownload.bind(this), 5000);
+    this.timer = setInterval(this.checkDownload.bind(this), 5000);
   }
 
   checkDownload() {
-    console.log('checkDownload', this.state.csvId);
+    console.log('checkDownload', this.csvId);
     axios
       .get(this.props.download_url, {
         params: {
-          csvId: this.state.csvId
+          csvId: this.csvId
         },
         headers: {
           Authorization: `Bearer ${this.props.loginToken}`,
@@ -77,8 +78,8 @@ class FileBox extends Component {
         }
       })
       .then(res => {
-        this.state.done = true;
-        clearInterval(this.state.timer);
+        this.setState({done : true});
+        clearInterval(this.timer);
       })
       .catch(err => {
         console.log(err);
@@ -91,7 +92,7 @@ class FileBox extends Component {
       .get(this.props.download_url, {
         responseType: "blob",
         params: {
-          csvId: this.state.csvId
+          csvId: this.csvId
         },
         headers: {
           Authorization: `Bearer ${this.props.loginToken}`,
