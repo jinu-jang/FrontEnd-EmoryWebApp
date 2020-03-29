@@ -35,20 +35,17 @@ const Icon = styled.img`
   padding-right: 15px;
 `;
 
-const FileBox = props => {
-  console.log(props.file);
-  const [done, setDone] = useState(false);
-  const [csvId, setCsvId] = useState("");
-  const [error, setError] = useState("");
-  const [uploaded, setUploaded] = useState(false);
-
-  const form = new FormData();
-  form.append("target_csv", props.file);
-  form.append("target_col", "Hello");
-
-  if (!uploaded) {
-    console.log('upload check!');
-    setUploaded(true);
+class FileBox extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      done : false,
+      csvId : "",
+      error: "",
+    }
+    const form = new FormData();
+    form.append("target_csv", props.file);
+    form.append("target_col", "Hello");
     axios
     .post(props.upload_url, form, {
       headers: {
@@ -57,55 +54,53 @@ const FileBox = props => {
       }
     })
     .then(response => {
-      setCsvId(response.data.csvId);
-      setUploaded(true);
-      setError("");
+      this.state.csvId = response.data.csvId
+      this.state.error = "";
     })
     .catch(error => {
-      setError(error.message);
-      setUploaded(false);
-      console.log(error.message);
+      this.state.error = error.message;
+      console.log(this.state.erro);
     });
+    this.state.timer = setInterval(this.checkDownload.bind(this), 5000);
   }
 
-
-  const checkDownload = () => {
-    console.log('checkDownload', csvId);
+  checkDownload() {
+    console.log('checkDownload', this.state.csvId);
     axios
-      .get(props.download_url, {
+      .get(this.props.download_url, {
         params: {
-          csvId: csvId
+          csvId: this.state.csvId
         },
         headers: {
-          Authorization: `Bearer ${props.loginToken}`,
+          Authorization: `Bearer ${this.props.loginToken}`,
           "Content-Type": "application/json"
         }
       })
       .then(res => {
-        setDone(true);
-        clearInterval(timer);
+        this.state.done = true;
+        clearInterval(this.state.timer);
       })
       .catch(err => {
         console.log(err);
       });
-  };
+  }
 
-  const doDownload = event => {
+  doDownload(event) {
     event.preventDefault();
     axios
-      .get(props.download_url, {
+      .get(this.props.download_url, {
         responseType: "blob",
         params: {
-          csvId: csvId
+          csvId: this.state.csvId
         },
         headers: {
-          Authorization: `Bearer ${props.loginToken}`,
+          Authorization: `Bearer ${this.props.loginToken}`,
           "Content-Type": "application/json",
           Accept: ".csv"
         }
       })
       .then(res => {
-        const filename = props.file.name.replace(".csv", "-anonymized.csv");
+        const filename = this.props.file.name.replace(".csv", "-anonymized.csv");
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -116,33 +111,29 @@ const FileBox = props => {
       .catch(err => {
         console.log(err);
       });
-  };
-
-  let timer;
-  if (!done) {
-    console.log('timer!');
-    timer = setInterval(checkDownload, 5000);
   }
 
-  return (
-    <FileWrapper>
-      <div>{props.file.name}</div>
-      {done ? (
-        <Icon src={CheckMark} />
-      ) : (
-        <Icon
-          src={
-            "http://cdn.lowgif.com/full/ba11c4d30b6f2054-loading-gif-transparent-background-to-setup-a-background-of-beach-just-run-it-is-best-do-this.gif"
-          }
-        />
-      )}
-      {done ? (
-        <Button onClick={doDownload}>DOWNLOAD</Button>
-      ) : (
-        <Button disabled={true}>LOADING</Button>
-      )}
-    </FileWrapper>
-  );
-};
+  render() {
+    return (
+      <FileWrapper>
+        <div>{this.props.file.name}</div>
+        {this.state.done ? (
+          <Icon src={CheckMark} />
+        ) : (
+          <Icon
+            src={
+              "http://cdn.lowgif.com/full/ba11c4d30b6f2054-loading-gif-transparent-background-to-setup-a-background-of-beach-just-run-it-is-best-do-this.gif"
+            }
+          />
+        )}
+        {this.state.done ? (
+          <Button onClick={this.doDownload.bind(this)}>DOWNLOAD</Button>
+        ) : (
+          <Button disabled={true}>LOADING</Button>
+        )}
+      </FileWrapper>
+    );
+  }
+}
 
 export default FileBox;
