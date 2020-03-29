@@ -10,12 +10,12 @@ const Container = styled.div`
   max-width: 680px;
   text-align: center;
   margin: 0 auto;
-`
+`;
 
 const ErrorSpan = styled.span`
   color: red;
   font-weight: bold;
-`
+`;
 
 const LoginDiv = styled.div`
   min-width: 480px;
@@ -27,12 +27,13 @@ const LoginDiv = styled.div`
 `;
 
 const instance = axios.create({
-  'baseURL' : 'http://localhost:3001',
-  "Content-Type" : 'application/json'
+  baseURL: "http://localhost:3001",
+  "Content-Type": "application/json"
 });
 
 let publicKey;
-instance.get('/api/auth/login')
+instance
+  .get("/api/auth/login")
   .then(response => {
     publicKey = response.data.publicKey;
   })
@@ -51,21 +52,27 @@ const Login = props => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    let options = `{"username":"${id}", "password":"${password}", "client_id":"jinu_front_end"}`
-    let encrypted_options = publicEncrypt(publicKey, Buffer.from(options, 'utf8')).toString("Base64");
-    console.log(encrypted_options)
+    let options = `{"username":"${id}", "password":"${password}", "client_id":"jinu_front_end"}`;
+    let encrypted_options = publicEncrypt(
+      publicKey,
+      Buffer.from(options, "utf8")
+    ).toString("Base64");
+    console.log(encrypted_options);
 
-    instance.post('/api/auth/login', {
-      "encrypted_options": encrypted_options
-    })
-    .then(response => {
-      props.setLoginToken(response.data.token);
-      setError(false);
-    })
-    .catch(error => {
-      console.log(`[Login] Error Code ${error.status}: ${error.data.message}`);
-      setError(true);
-    })
+    instance
+      .post("/api/auth/login", {
+        encrypted_options: encrypted_options
+      })
+      .then(response => {
+        props.setLoginToken(response.data.token);
+        setError(false);
+      })
+      .catch(error => {
+        console.log(
+          `[Login] Error Code ${error.status}: ${error.data.message}`
+        );
+        setError(true);
+      });
   }
 
   return (

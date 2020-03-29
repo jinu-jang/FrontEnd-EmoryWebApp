@@ -40,50 +40,44 @@ const FileBox = props => {
 
   const checkDownload = () => {
     axios
-      .get(
-        props.targetLink,
-        {
-          params: {
-            csvId : props.fileId
-          },
-          headers: {
-            Authorization: `Bearer ${props.loginToken}`,
-            'Content-Type': 'application/json'
-          }
+      .get(props.targetLink, {
+        params: {
+          csvId: props.fileId
+        },
+        headers: {
+          Authorization: `Bearer ${props.loginToken}`,
+          "Content-Type": "application/json"
         }
-      )
+      })
       .then(res => {
         setDone(true);
-        clearInterval(timer)
+        clearInterval(timer);
       })
       .catch(err => {
         console.log(err);
       });
   };
 
-  const doDownload = (event) => {
+  const doDownload = event => {
     event.preventDefault();
     axios
-      .get(
-        props.targetLink,
-        {
-          responseType: 'blob',
-          params: {
-            csvId : props.fileId
-          },
-          headers: {
-            Authorization: `Bearer ${props.loginToken}`,
-            'Content-Type': 'application/json',
-            Accept: '.csv'
-          }
+      .get(props.targetLink, {
+        responseType: "blob",
+        params: {
+          csvId: props.fileId
+        },
+        headers: {
+          Authorization: `Bearer ${props.loginToken}`,
+          "Content-Type": "application/json",
+          Accept: ".csv"
         }
-      )
+      })
       .then(res => {
-        const filename = props.fileName.replace('.csv', '-anonymized.csv');
+        const filename = props.fileName.replace(".csv", "-anonymized.csv");
         const url = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
-        link.setAttribute('download', filename); //or any other extension
+        link.setAttribute("download", filename); //or any other extension
         document.body.appendChild(link);
         link.click();
       })
