@@ -1,14 +1,7 @@
 import React, { useCallback, useState, Fragment } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
-import axios from "axios";
-import FormData from "form-data";
 import FileBox from "./FileBox";
-
-const ErrorSpan = styled.span`
-  color: red;
-  font-weight: bold;
-`;
 
 const Box = styled.div`
   margin-top: 30px;
@@ -33,50 +26,21 @@ const BoxIcon = styled.svg`
 
 const url = "http://localhost:3001";
 const download_url = url + "/api/download";
-const instance = axios.create({
-  baseURL: url,
-  "Content-Type": "multipart"
-});
 
 function MyDropzone(props) {
-  const [error, setError] = useState("");
-  const [csvId, setCsvId] = useState("");
   const [uploaded, setUploaded] = useState(false);
-  const [fileName, setFileName] = useState("");
 
   const onDrop = useCallback(acceptedFile => {
-    const form = new FormData();
-    form.append("target_csv", acceptedFile[0]);
-    form.append("target_col", "Hello");
-    setFileName(acceptedFile[0].name);
+    // Add FileBox generation
 
-    instance
-      .post("/api/upload", form, {
-        headers: {
-          Authorization: `Bearer ${props.loginToken}`
-        }
-      })
-      .then(response => {
-        setCsvId(response.data.csvId);
-        setError("");
-        setUploaded(true);
-      })
-      .catch(error => {
-        setError(error.data.message);
-      });
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
     <Box {...getRootProps()}>
-      {error && <ErrorSpan>${error}</ErrorSpan>}
       {uploaded ? (
-        <FileBox
-          loginToken={props.loginToken}
-          fileName={fileName}
-          fileId={csvId}
-          targetLink={download_url}
-        />
+        // add Carousel
+        <p>placeholder</p>
       ) : (
         <Fragment>
           <BoxIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 43">
