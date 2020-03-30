@@ -40,7 +40,6 @@ const Arrow = styled.button`
 const url = "http://localhost:3001";
 const upload_url = url + "/api/upload";
 const download_url = url + "/api/download";
-const upload_url = url + "/api/upload";
 
 function MyDropzone(props) {
   const [uploaded, setUploaded] = useState(false);
@@ -51,17 +50,13 @@ function MyDropzone(props) {
   const onDrop = useCallback(acceptedFiles => {
     setUploaded(true);
     acceptedFiles.map(file => {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        addFileBoxProps(prevState => [
-          ...prevState,
-          { file: acceptedFiles[0].file, fileId: acceptedFiles[0].scvId }
-        ]);
-      };
-      reader.readAsDataURL(file);
+      addFileBoxProps(prevState => [
+        ...prevState,
+        { file: acceptedFiles[0] }
+      ]);
       return file;
     });
-    addFile(fileCount => fileCount + fileCount + 1);
+    addFile(fileCount => fileCount + 1);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
