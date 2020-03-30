@@ -38,6 +38,7 @@ const Arrow = styled.button`
 `;
 
 const url = "http://localhost:3001";
+const upload_url = url + "/api/upload";
 const download_url = url + "/api/download";
 const upload_url = url + "/api/upload";
 

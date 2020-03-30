@@ -11,7 +11,6 @@ const FileList = ({ files, props }) => {
       <FileBox
         file={fileprops.file}
         loginToken={props.loginToken}
-        fileId={fileprops.csvId}
         upload_url={upload_url}
         download_url={download_url}
       />
