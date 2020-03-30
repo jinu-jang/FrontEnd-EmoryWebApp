@@ -52,7 +52,7 @@ function MyDropzone(props) {
     acceptedFiles.map(file => {
       addFileBoxProps(prevState => [
         ...prevState,
-        { file: acceptedFiles[0] }
+        { file: file }
       ]);
       return file;
     });
