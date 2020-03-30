@@ -1,7 +1,6 @@
 import React, { useCallback, useState, Fragment } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
-import FileBox from "./FileBox";
 import left_arrow from "./../../img/left-arrow.png";
 import right_arrow from "./../../img/right-arrow.png";
 import FileList from "./FileList";
@@ -56,18 +55,22 @@ function MyDropzone(props) {
       ]);
       return file;
     });
-    addFile(fileCount => fileCount + 1);
+    addFile(fileCount => fileCount + acceptedFiles.length);
   }, []);
-
+  console.log("fileCount:", fileCount)
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
     <Box {...getRootProps()}>
-      <Arrow onClick={console.log(1)}>
-        <img src={left_arrow}></img>
+      <Arrow onClick={console.log("[Dropzone] Left Arrow Click")}>
+        <img src={left_arrow} alt="Left Arrow" />
       </Arrow>
       {uploaded ? (
-        <FileList files={fileBoxProps} props={props} />
+        <FileList
+          files={fileBoxProps}
+          loginToken={props.loginToken}
+          upload_url={upload_url}
+          download_url={download_url} />
       ) : (
         <Fragment>
           <BoxArrow xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 43">
@@ -76,8 +79,8 @@ function MyDropzone(props) {
           <input {...getInputProps()} />
         </Fragment>
       )}
-      <Arrow onClick={console.log(1)}>
-        <img src={right_arrow}></img>
+      <Arrow onClick={console.log("[Dropzone] Right Arrow Click")}>
+        <img src={right_arrow} alt="Right Arrow" />
       </Arrow>
     </Box>
   );
