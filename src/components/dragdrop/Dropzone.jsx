@@ -57,7 +57,7 @@ function MyDropzone(props) {
     });
     addFile(fileCount => fileCount + acceptedFiles.length);
   }, []);
-  console.log("fileCount:", fileCount)
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
