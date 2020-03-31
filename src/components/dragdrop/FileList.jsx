@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import FileBox from "./FileBox";
 
-const FileList = (props) => {
+const FileList = props => {
   const renderFile = (wrappedFile, index) => {
     return (
       <FileBox
@@ -14,7 +14,13 @@ const FileList = (props) => {
     );
   };
 
-  return <Fragment>{props.files.map(renderFile)}</Fragment>;
+  return (
+    <Fragment>
+      {props.files
+        .slice(props.pageNumber * 4, (props.pageNumber + 1) * 4)
+        .map(renderFile)}
+    </Fragment>
+  );
 };
 
 export default FileList;
