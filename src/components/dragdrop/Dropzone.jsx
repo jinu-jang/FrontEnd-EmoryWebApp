@@ -1,7 +1,6 @@
 import React, { useCallback, useState, Fragment } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
-import FileBox from "./FileBox";
 import left_arrow from "./../../img/left-arrow.png";
 import right_arrow from "./../../img/right-arrow.png";
 import FileList from "./FileList";
@@ -38,8 +37,8 @@ const Arrow = styled.button`
 `;
 
 const url = "http://localhost:3001";
-const download_url = url + "/api/download";
 const upload_url = url + "/api/upload";
+const download_url = url + "/api/download";
 
 function MyDropzone(props) {
   const [uploaded, setUploaded] = useState(false);
@@ -50,28 +49,28 @@ function MyDropzone(props) {
   const onDrop = useCallback(acceptedFiles => {
     setUploaded(true);
     acceptedFiles.map(file => {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        addFileBoxProps(prevState => [
-          ...prevState,
-          { file: acceptedFiles[0].file, fileId: acceptedFiles[0].scvId }
-        ]);
-      };
-      reader.readAsDataURL(file);
+      addFileBoxProps(prevState => [
+        ...prevState,
+        { file: file }
+      ]);
       return file;
     });
-    addFile(fileCount => fileCount + fileCount + 1);
+    addFile(fileCount => fileCount + acceptedFiles.length);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
     <Box {...getRootProps()}>
-      <Arrow onClick={console.log(1)}>
-        <img src={left_arrow}></img>
+      <Arrow onClick={console.log("[Dropzone] Left Arrow Click")}>
+        <img src={left_arrow} alt="Left Arrow" />
       </Arrow>
       {uploaded ? (
-        <FileList files={fileBoxProps} props={props} />
+        <FileList
+          files={fileBoxProps}
+          loginToken={props.loginToken}
+          upload_url={upload_url}
+          download_url={download_url} />
       ) : (
         <Fragment>
           <BoxArrow xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 43">
@@ -80,8 +79,8 @@ function MyDropzone(props) {
           <input {...getInputProps()} />
         </Fragment>
       )}
-      <Arrow onClick={console.log(1)}>
-        <img src={right_arrow}></img>
+      <Arrow onClick={console.log("[Dropzone] Right Arrow Click")}>
+        <img src={right_arrow} alt="Right Arrow" />
       </Arrow>
     </Box>
   );
