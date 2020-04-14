@@ -1,14 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import FormData from "form-data";
 import CheckMark from "./../../img/check-mark.png";
 
-const FileWrapper = styled.div`
+const VisibleFileWrapper = styled.li`
   background-color: #fff0ed;
   height: auto;
-  width: 20%;
+  width: 22%;
   margin: 0 auto;
   padding: 6px 8px;
   font-size: 12px;
@@ -19,8 +19,26 @@ const FileWrapper = styled.div`
   border-style: solid;
   border: 1px solid #ccc;
   color: #333;
-  display: block;
   text-align: -webkit-match-parent;
+  display: inline-block;
+`;
+
+const InvisibleFileWrapper = styled.li`
+  background-color: #fff0ed;
+  height: auto;
+  width: 22%;
+  margin: 0 auto;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-weight: normal;
+  border-radius: 4px;
+  position: relative;
+  border-width: 1px;
+  border-style: solid;
+  border: 1px solid #ccc;
+  color: #333;
+  text-align: -webkit-match-parent;
+  display: none;
 `;
 
 const Icon = styled.img`
@@ -39,49 +57,49 @@ class FileBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      done : false,
+      done: false,
       error: "",
-    }
+    };
     this.csvId = "";
 
     const form = new FormData();
     form.append("target_csv", props.file);
     form.append("target_col", "Hello");
     axios
-    .post(props.upload_url, form, {
-      headers: {
-        Authorization: `Bearer ${props.loginToken}`,
-        "Content-Type": "multipart"
-      }
-    })
-    .then(response => {
-      this.csvId = response.data.csvId
-      this.state.error = "";
-    })
-    .catch(error => {
-      this.state.error = error.message;
-      console.log(this.state.erro);
-    });
+      .post(props.upload_url, form, {
+        headers: {
+          Authorization: `Bearer ${props.loginToken}`,
+          "Content-Type": "multipart",
+        },
+      })
+      .then((response) => {
+        this.csvId = response.data.csvId;
+        this.state.error = "";
+      })
+      .catch((error) => {
+        this.state.error = error.message;
+        console.log(this.state.erro);
+      });
     this.timer = setInterval(this.checkDownload.bind(this), 5000);
   }
 
   checkDownload() {
-    console.log('checkDownload', this.csvId);
+    console.log("checkDownload", this.csvId);
     axios
       .get(this.props.download_url, {
         params: {
-          csvId: this.csvId
+          csvId: this.csvId,
         },
         headers: {
           Authorization: `Bearer ${this.props.loginToken}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       })
-      .then(res => {
-        this.setState({done : true});
+      .then((res) => {
+        this.setState({ done: true });
         clearInterval(this.timer);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -92,16 +110,19 @@ class FileBox extends Component {
       .get(this.props.download_url, {
         responseType: "blob",
         params: {
-          csvId: this.csvId
+          csvId: this.csvId,
         },
         headers: {
           Authorization: `Bearer ${this.props.loginToken}`,
           "Content-Type": "application/json",
-          Accept: ".csv"
-        }
+          Accept: ".csv",
+        },
       })
-      .then(res => {
-        const filename = this.props.file.name.replace(".csv", "-anonymized.csv");
+      .then((res) => {
+        const filename = this.props.file.name.replace(
+          ".csv",
+          "-anonymized.csv"
+        );
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -109,30 +130,52 @@ class FileBox extends Component {
         document.body.appendChild(link);
         link.click();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
 
   render() {
     return (
-      <FileWrapper>
-        <div>{this.props.file.name}</div>
-        {this.state.done ? (
-          <Icon src={CheckMark} />
+      <Fragment>
+        {this.props.hidden ? (
+          <VisibleFileWrapper>
+            <div>{this.props.file.name}</div>
+            {this.state.done ? (
+              <Icon src={CheckMark} />
+            ) : (
+              <Icon
+                src={
+                  "http://cdn.lowgif.com/full/ba11c4d30b6f2054-loading-gif-transparent-background-to-setup-a-background-of-beach-just-run-it-is-best-do-this.gif"
+                }
+              />
+            )}
+            {this.state.done ? (
+              <Button onClick={this.doDownload.bind(this)}>DOWNLOAD</Button>
+            ) : (
+              <Button disabled={true}>LOADING</Button>
+            )}
+          </VisibleFileWrapper>
         ) : (
-          <Icon
-            src={
-              "http://cdn.lowgif.com/full/ba11c4d30b6f2054-loading-gif-transparent-background-to-setup-a-background-of-beach-just-run-it-is-best-do-this.gif"
-            }
-          />
+          <InvisibleFileWrapper>
+            <div>{this.props.file.name}</div>
+            {this.state.done ? (
+              <Icon src={CheckMark} />
+            ) : (
+              <Icon
+                src={
+                  "http://cdn.lowgif.com/full/ba11c4d30b6f2054-loading-gif-transparent-background-to-setup-a-background-of-beach-just-run-it-is-best-do-this.gif"
+                }
+              />
+            )}
+            {this.state.done ? (
+              <Button onClick={this.doDownload.bind(this)}>DOWNLOAD</Button>
+            ) : (
+              <Button disabled={true}>LOADING</Button>
+            )}
+          </InvisibleFileWrapper>
         )}
-        {this.state.done ? (
-          <Button onClick={this.doDownload.bind(this)}>DOWNLOAD</Button>
-        ) : (
-          <Button disabled={true}>LOADING</Button>
-        )}
-      </FileWrapper>
+      </Fragment>
     );
   }
 }

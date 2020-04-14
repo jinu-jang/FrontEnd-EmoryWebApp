@@ -12,6 +12,7 @@ const Box = styled.div`
   outline-offset: -10px;
   transition: outline-offset 0.15s ease-in-out, background-color 0.15s linear;
   padding: 100px 20px;
+  overflow: hidden;
 
   p:hover b {
     color: #39bfd3;
@@ -47,13 +48,13 @@ function MyDropzone(props) {
   const [fileBoxProps, addFileBoxProps] = useState([]);
   const itemPerPage = 4;
 
-  const onDrop = useCallback(acceptedFiles => {
+  const onDrop = useCallback((acceptedFiles) => {
     setUploaded(true);
-    acceptedFiles.map(file => {
-      addFileBoxProps(prevState => [...prevState, { file: file }]);
+    acceptedFiles.map((file) => {
+      addFileBoxProps((prevState) => [...prevState, { file }]);
       return file;
     });
-    addFile(fileCount => {
+    addFile((fileCount) => {
       fileCount += acceptedFiles.length;
       changePage(Math.floor((fileCount - 1) / 4));
       return fileCount;
@@ -64,15 +65,15 @@ function MyDropzone(props) {
 
   function LeftArrowAction(event) {
     event.preventDefault();
-    pageNumber != 0
-      ? changePage(pageNumber => pageNumber - 1)
+    pageNumber !== 0
+      ? changePage((pageNumber) => pageNumber - 1)
       : console.log("first page");
   }
 
   function RightArrowAction(event) {
     event.preventDefault();
     pageNumber < (fileCount - itemPerPage) / itemPerPage
-      ? changePage(pageNumber => pageNumber + 1)
+      ? changePage((pageNumber) => pageNumber + 1)
       : console.log("last page");
   }
 

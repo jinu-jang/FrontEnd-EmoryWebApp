@@ -1,8 +1,29 @@
-import React, { Fragment } from "react";
+import React from "react";
 import FileBox from "./FileBox";
+import styled from "styled-components";
 
-const FileList = props => {
+const FileWrapper = styled.div`
+  overflow: hidden;
+  display: contents;
+  width: 100%;
+  height: 142px;
+`;
+
+const ListWrapper = styled.ul`
+  margin: 0px;
+  padding: 0px;
+  position: relative;
+  list-style-type: none;
+  z-index: 1;
+  width: 160%;
+  height: 100%;
+  left: 0%;
+`;
+
+const FileList = (props) => {
   const renderFile = (wrappedFile, index) => {
+    const hidden =
+      index >= props.pageNumber * 4 && index < (props.pageNumber + 1) * 4;
     return (
       <FileBox
         key={index}
@@ -10,16 +31,15 @@ const FileList = props => {
         loginToken={props.loginToken}
         upload_url={props.upload_url}
         download_url={props.download_url}
+        hidden={hidden}
       />
     );
   };
 
   return (
-    <Fragment>
-      {props.files
-        .slice(props.pageNumber * 4, (props.pageNumber + 1) * 4)
-        .map(renderFile)}
-    </Fragment>
+    <FileWrapper>
+      <ListWrapper>{props.files.map(renderFile)}</ListWrapper>
+    </FileWrapper>
   );
 };
 
