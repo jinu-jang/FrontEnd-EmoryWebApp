@@ -5,7 +5,7 @@ import axios from "axios";
 import FormData from "form-data";
 import CheckMark from "./../../img/check-mark.png";
 
-const VisibleFileWrapper = styled.li`
+const FileWrapper = styled.li`
   background-color: #fff0ed;
   height: auto;
   width: 22%;
@@ -20,25 +20,6 @@ const VisibleFileWrapper = styled.li`
   border: 1px solid #ccc;
   color: #333;
   text-align: -webkit-match-parent;
-  display: inline-block;
-`;
-
-const InvisibleFileWrapper = styled.li`
-  background-color: #fff0ed;
-  height: auto;
-  width: 22%;
-  margin: 0 auto;
-  padding: 6px 8px;
-  font-size: 12px;
-  font-weight: normal;
-  border-radius: 4px;
-  position: relative;
-  border-width: 1px;
-  border-style: solid;
-  border: 1px solid #ccc;
-  color: #333;
-  text-align: -webkit-match-parent;
-  display: none;
 `;
 
 const Icon = styled.img`
@@ -137,45 +118,25 @@ class FileBox extends Component {
 
   render() {
     return (
-      <Fragment>
-        {this.props.hidden ? (
-          <VisibleFileWrapper>
-            <div>{this.props.file.name}</div>
-            {this.state.done ? (
-              <Icon src={CheckMark} />
-            ) : (
-              <Icon
-                src={
-                  "http://cdn.lowgif.com/full/ba11c4d30b6f2054-loading-gif-transparent-background-to-setup-a-background-of-beach-just-run-it-is-best-do-this.gif"
-                }
-              />
-            )}
-            {this.state.done ? (
-              <Button onClick={this.doDownload.bind(this)}>DOWNLOAD</Button>
-            ) : (
-              <Button disabled={true}>LOADING</Button>
-            )}
-          </VisibleFileWrapper>
+      <FileWrapper
+        style={{ display: this.props.hidden ? "inline-block" : "none" }}
+      >
+        <div>{this.props.file.name}</div>
+        {this.state.done ? (
+          <Icon src={CheckMark} />
         ) : (
-          <InvisibleFileWrapper>
-            <div>{this.props.file.name}</div>
-            {this.state.done ? (
-              <Icon src={CheckMark} />
-            ) : (
-              <Icon
-                src={
-                  "http://cdn.lowgif.com/full/ba11c4d30b6f2054-loading-gif-transparent-background-to-setup-a-background-of-beach-just-run-it-is-best-do-this.gif"
-                }
-              />
-            )}
-            {this.state.done ? (
-              <Button onClick={this.doDownload.bind(this)}>DOWNLOAD</Button>
-            ) : (
-              <Button disabled={true}>LOADING</Button>
-            )}
-          </InvisibleFileWrapper>
+          <Icon
+            src={
+              "http://cdn.lowgif.com/full/ba11c4d30b6f2054-loading-gif-transparent-background-to-setup-a-background-of-beach-just-run-it-is-best-do-this.gif"
+            }
+          />
         )}
-      </Fragment>
+        {this.state.done ? (
+          <Button onClick={this.doDownload.bind(this)}>DOWNLOAD</Button>
+        ) : (
+          <Button disabled={true}>LOADING</Button>
+        )}
+      </FileWrapper>
     );
   }
 }
