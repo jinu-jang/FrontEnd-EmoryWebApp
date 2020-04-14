@@ -59,7 +59,7 @@ class FileBox extends Component {
       })
       .catch((error) => {
         this.state.error = error.message;
-        console.log(this.state.erro);
+        console.log(this.state.error);
       });
     this.timer = setInterval(this.checkDownload.bind(this), 5000);
   }
