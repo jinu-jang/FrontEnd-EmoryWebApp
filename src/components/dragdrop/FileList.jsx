@@ -22,10 +22,9 @@ const ListWrapper = styled.ul`
 
 const FileList = (props) => {
   const renderFile = (wrappedFile, index) => {
-    const itemPerPage = 4;
     const hidden =
-      index >= props.pageNumber * itemPerPage &&
-      index < (props.pageNumber + 1) * itemPerPage;
+      index >= props.pageNumber * props.itemPerPage &&
+      index < (props.pageNumber + 1) * props.itemPerPage;
     return (
       <FileBox
         key={index}

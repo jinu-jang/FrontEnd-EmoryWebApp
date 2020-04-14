@@ -89,6 +89,7 @@ function MyDropzone(props) {
           upload_url={upload_url}
           download_url={download_url}
           pageNumber={pageNumber}
+          itemPerPage={itemPerPage}
         />
       ) : (
         <Fragment>
