@@ -1,14 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import FormData from "form-data";
 import CheckMark from "./../../img/check-mark.png";
 
-const FileWrapper = styled.div`
+const FileWrapper = styled.li`
   background-color: #fff0ed;
   height: auto;
-  width: 20%;
+  width: 22%;
   margin: 0 auto;
   padding: 6px 8px;
   font-size: 12px;
@@ -19,7 +19,6 @@ const FileWrapper = styled.div`
   border-style: solid;
   border: 1px solid #ccc;
   color: #333;
-  display: block;
   text-align: -webkit-match-parent;
 `;
 
@@ -39,49 +38,49 @@ class FileBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      done : false,
+      done: false,
       error: "",
-    }
+    };
     this.csvId = "";
 
     const form = new FormData();
     form.append("target_csv", props.file);
     form.append("target_col", "Hello");
     axios
-    .post(props.upload_url, form, {
-      headers: {
-        Authorization: `Bearer ${props.loginToken}`,
-        "Content-Type": "multipart"
-      }
-    })
-    .then(response => {
-      this.csvId = response.data.csvId
-      this.state.error = "";
-    })
-    .catch(error => {
-      this.state.error = error.message;
-      console.log(this.state.erro);
-    });
+      .post(props.upload_url, form, {
+        headers: {
+          Authorization: `Bearer ${props.loginToken}`,
+          "Content-Type": "multipart",
+        },
+      })
+      .then((response) => {
+        this.csvId = response.data.csvId;
+        this.state.error = "";
+      })
+      .catch((error) => {
+        this.state.error = error.message;
+        console.log(this.state.error);
+      });
     this.timer = setInterval(this.checkDownload.bind(this), 5000);
   }
 
   checkDownload() {
-    console.log('checkDownload', this.csvId);
+    console.log("checkDownload", this.csvId);
     axios
       .get(this.props.download_url, {
         params: {
-          csvId: this.csvId
+          csvId: this.csvId,
         },
         headers: {
           Authorization: `Bearer ${this.props.loginToken}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       })
-      .then(res => {
-        this.setState({done : true});
+      .then((res) => {
+        this.setState({ done: true });
         clearInterval(this.timer);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -92,16 +91,19 @@ class FileBox extends Component {
       .get(this.props.download_url, {
         responseType: "blob",
         params: {
-          csvId: this.csvId
+          csvId: this.csvId,
         },
         headers: {
           Authorization: `Bearer ${this.props.loginToken}`,
           "Content-Type": "application/json",
-          Accept: ".csv"
-        }
+          Accept: ".csv",
+        },
       })
-      .then(res => {
-        const filename = this.props.file.name.replace(".csv", "-anonymized.csv");
+      .then((res) => {
+        const filename = this.props.file.name.replace(
+          ".csv",
+          "-anonymized.csv"
+        );
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -109,14 +111,16 @@ class FileBox extends Component {
         document.body.appendChild(link);
         link.click();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
 
   render() {
     return (
-      <FileWrapper>
+      <FileWrapper
+        style={{ display: this.props.hidden ? "inline-block" : "none" }}
+      >
         <div>{this.props.file.name}</div>
         {this.state.done ? (
           <Icon src={CheckMark} />
