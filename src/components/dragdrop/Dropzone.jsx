@@ -4,6 +4,8 @@ import styled from "styled-components";
 import left_arrow from "./../../img/left-arrow.png";
 import right_arrow from "./../../img/right-arrow.png";
 import FileList from "./FileList";
+import dotenv from "dotenv";
+dotenv.config();
 
 const Box = styled.div`
   margin-top: 30px;
@@ -37,7 +39,8 @@ const Arrow = styled.button`
   margin-top: 7%;
 `;
 
-const url = "http://localhost:3001";
+const url = process.env.REACT_APP_BACKEND_URL;
+console.log(`dropzone url: ${url}`);
 const upload_url = url + "/api/upload";
 const download_url = url + "/api/download";
 
@@ -61,7 +64,7 @@ function MyDropzone(props) {
     });
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   function LeftArrowAction(event) {
     event.preventDefault();
