@@ -27,7 +27,7 @@ const LoginDiv = styled.div`
 `;
 
 const instance = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: process.env.REACT_APP_BACKEND_URL,
   "Content-Type": "application/json"
 });
 

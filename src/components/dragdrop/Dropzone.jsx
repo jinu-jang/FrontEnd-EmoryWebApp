@@ -37,7 +37,8 @@ const Arrow = styled.button`
   margin-top: 7%;
 `;
 
-const url = "http://localhost:3001";
+const url = process.env.REACT_APP_BACKEND_URL;
+console.log(`dropzone url: ${url}`);
 const upload_url = url + "/api/upload";
 const download_url = url + "/api/download";
 
@@ -61,7 +62,7 @@ function MyDropzone(props) {
     });
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   function LeftArrowAction(event) {
     event.preventDefault();
