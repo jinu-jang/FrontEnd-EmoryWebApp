@@ -4,8 +4,6 @@ import styled from "styled-components";
 import left_arrow from "./../../img/left-arrow.png";
 import right_arrow from "./../../img/right-arrow.png";
 import FileList from "./FileList";
-import dotenv from "dotenv";
-dotenv.config();
 
 const Box = styled.div`
   margin-top: 30px;

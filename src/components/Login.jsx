@@ -5,8 +5,6 @@ import axios from "axios";
 import { publicEncrypt } from "crypto";
 import Header from "./header-footer/Header";
 
-const baseURL = process.env.REACT_APP_BACKEND_URL;
-
 const Container = styled.div`
   width: 100%;
   max-width: 680px;
@@ -29,7 +27,7 @@ const LoginDiv = styled.div`
 `;
 
 const instance = axios.create({
-  baseURL: baseURL,
+  baseURL: process.env.REACT_APP_BACKEND_URL,
   "Content-Type": "application/json"
 });
 
