@@ -1,9 +1,11 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import FormData from "form-data";
 import CheckMark from "./../../img/check-mark.png";
+import DetailMark from "./../../img/detail-mark.png";
+import LoadingMark from "./../../img/loading-mark.gif";
 
 const FileWrapper = styled.li`
   background-color: #fff0ed;
@@ -40,6 +42,7 @@ class FileBox extends Component {
     this.state = {
       done: false,
       error: "",
+      detailDone: false,
     };
     this.csvId = "";
 
@@ -123,18 +126,22 @@ class FileBox extends Component {
       >
         <div>{this.props.file.name}</div>
         {this.state.done ? (
-          <Icon src={CheckMark} />
+          this.state.detailDone ? (
+            <Fragment>
+              <Icon src={CheckMark} />
+              <Button onClick={this.doDownload.bind(this)}>DOWNLOAD</Button>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <Icon src={DetailMark} />
+              <Button onClick={this.doDownload.bind(this)}>DETAIL</Button>
+            </Fragment>
+          )
         ) : (
-          <Icon
-            src={
-              "http://cdn.lowgif.com/full/ba11c4d30b6f2054-loading-gif-transparent-background-to-setup-a-background-of-beach-just-run-it-is-best-do-this.gif"
-            }
-          />
-        )}
-        {this.state.done ? (
-          <Button onClick={this.doDownload.bind(this)}>DOWNLOAD</Button>
-        ) : (
-          <Button disabled={true}>LOADING</Button>
+          <Fragment>
+            <Icon src={LoadingMark} />
+            <Button disabled={true}>LOADING</Button>
+          </Fragment>
         )}
       </FileWrapper>
     );
