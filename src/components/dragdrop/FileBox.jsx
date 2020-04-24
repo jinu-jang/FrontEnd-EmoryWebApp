@@ -100,9 +100,13 @@ class FileBox extends Component {
         },
       })
       .then((res) => {
+        let extension = this.props.file.name.split('.')
+        extension = extension[extension.length - 1]
+
+
         const filename = this.props.file.name.replace(
-          ".csv",
-          "-anonymized.csv"
+          `.${extension}`,
+          `-anonymized.${extension}`
         );
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
