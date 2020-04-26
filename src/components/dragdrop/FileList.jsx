@@ -33,6 +33,8 @@ const FileList = (props) => {
         upload_url={props.upload_url}
         download_url={props.download_url}
         hidden={hidden}
+        checkedBox={props.checkedBoxs[index]}
+        clickHandler={() => props.clickHandler(index)}
       />
     );
   };

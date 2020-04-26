@@ -46,6 +46,8 @@ class FileBox extends Component {
     };
     this.csvId = "";
 
+    console.log(props);
+
     const form = new FormData();
     form.append("target_csv", props.file);
     form.append("target_col", "Hello");
@@ -124,21 +126,29 @@ class FileBox extends Component {
       <FileWrapper
         style={{ display: this.props.hidden ? "inline-block" : "none" }}
       >
-        <div>{this.props.file.name}</div>
         {this.state.done ? (
           this.state.detailDone ? (
             <Fragment>
+              <div>{this.props.file.name}</div>
               <Icon src={CheckMark} />
               <Button onClick={this.doDownload.bind(this)}>DOWNLOAD</Button>
             </Fragment>
           ) : (
             <Fragment>
+              <input
+                type="checkbox"
+                checked={this.props.checkedBox && "checked"}
+                style={{ display: "block" }}
+                onChange={this.props.clickHandler}
+              />
+              <div>{this.props.file.name}</div>
               <Icon src={DetailMark} />
               <Button onClick={this.doDownload.bind(this)}>DETAIL</Button>
             </Fragment>
           )
         ) : (
           <Fragment>
+            <div>{this.props.file.name}</div>
             <Icon src={LoadingMark} />
             <Button disabled={true}>LOADING</Button>
           </Fragment>
