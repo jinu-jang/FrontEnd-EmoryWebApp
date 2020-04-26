@@ -46,8 +46,6 @@ class FileBox extends Component {
     };
     this.csvId = "";
 
-    console.log(props);
-
     const form = new FormData();
     form.append("target_csv", props.file);
     form.append("target_col", "Hello");
