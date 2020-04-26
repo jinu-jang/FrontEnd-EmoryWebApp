@@ -6,6 +6,7 @@ import right_arrow from "./../../img/right-arrow.png";
 import FileList from "./FileList";
 import { Button } from "react-bootstrap";
 import setting from "./../../img/setting.png";
+import PopUp from "./../PopUpPage";
 
 const Box = styled.div`
   margin-top: 30px;
@@ -70,6 +71,7 @@ function MyDropzone(props) {
   const [pageNumber, changePage] = useState(0);
   const [fileBoxProps, addFileBoxProps] = useState([]);
   const [checkedBoxs, changeCheckBox] = useState([]);
+  const [seen, togglePop] = useState(false);
   const itemPerPage = 4;
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -122,9 +124,14 @@ function MyDropzone(props) {
     changeCheckBox(() => boxs);
   }
 
+  function changePopUp(event) {
+    togglePop((seen) => !seen);
+  }
+
   return (
     <Box {...getRootProps()}>
       <DropBox>
+        {seen ? <PopUp toggle={changePopUp} /> : null}
         <div>
           <Button onClick={SelectAllButtonAction}>Select All</Button>
           <Button onClick={DeselectAllButtonAction}>Deselect All</Button>
@@ -161,7 +168,7 @@ function MyDropzone(props) {
         </Arrow>
       </DropBox>
       <SettingBox>
-        <SettingIcon>
+        <SettingIcon onClick={changePopUp}>
           <img src={setting} />
         </SettingIcon>
       </SettingBox>
